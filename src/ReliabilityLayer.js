@@ -226,14 +226,14 @@ class ReliabilityLayer {
 
       this.sendSplitPacketId += 1
 
-      chunks.forEach((chunk) => {
+      chunks.forEach((chunk, idx) => {
         this.sends.push({
           packet: chunk,
           reliability: reliability,
           orderingIndex: orderingIndex,
           splitPacketInfo: {
             id: this.sendSplitPacketId,
-            index: 0,
+            index: idx,
             count: chunks.length
           }
         })
