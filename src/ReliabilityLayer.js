@@ -19,6 +19,7 @@ class ReliabilityLayer {
     this.sends = []
     this.packetsSent = 0
     this.sendMessageNumberIndex = 0
+    this.sendSplitPacketId = 0
 
     this.sequencedReadIndex = 0
     this.sequencedWriteIndex = 0
@@ -212,20 +213,31 @@ class ReliabilityLayer {
     }
 
     if (this.packetHeaderLength(reliability, false) + packet.length() >= 1200) {
-      // TODO: Add a way to split packets and iterate through them to add them to the queue
-
       let packetOffset = 0
       const chunks = []
 
       while (packetOffset < packet.length()) {
         const packetLength = 1200 - this.packetHeaderLength(reliability, true)
 
-        //chunks.push()
+        chunks.push(packet.buffer.slice(packetOffset, packetOffset + packetLength))
 
         packetOffset += packetLength
       }
 
-      this.logger.error("This packet needs to be split up")
+      this.sendSplitPacketId += 1
+
+      chunks.forEach((chunk) => {
+        this.sends.push({
+          packet: chunk,
+          reliability: reliability,
+          orderingIndex: orderingIndex,
+          splitPacketInfo: {
+            id: this.sendSplitPacketId,
+            index: 0,
+            count: chunks.length
+          }
+        })
+      })
     } else {
       this.sends.push({
         packet: packet,
@@ -247,7 +259,13 @@ class ReliabilityLayer {
       const index = this.sendMessageNumberIndex
       this.sendMessageNumberIndex++
 
-      this.sendMessage(packet.packet, index, packet.reliability, packet.orderingIndex, undefined)
+      this.sendMessage(
+        packet.packet,
+        index,
+        packet.reliability,
+        packet.orderingIndex,
+        packet.splitPacketInfo
+      )
     }
 
     if (!this.acks.isEmpty()) {
