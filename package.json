@@ -1,25 +1,18 @@
 {
   "name": "node-raknet",
-  "version": "1.1.5",
-  "description": "A raknet library for node",
-  "main": "RakServer.js",
-  "scripts": {
-    "test": "mocha"
-  },
+  "version": "1.0.5",
+  "description": "A cleaner and modified version of Raine's node-raknet",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RaineBannister/node-raknet.git"
+    "url": "git+https://github.com/Zaseth/node-raknet.git"
   },
   "keywords": [
     "raknet"
   ],
-  "author": "Raine Bannister",
-  "license": "ISC",
+  "author": "Zaseth",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/RaineBannister/node-raknet/issues"
+    "url": "https://github.com/Zaseth/node-raknet/issues"
   },
-  "homepage": "https://github.com/RaineBannister/node-raknet#readme",
-  "devDependencies": {
-    "mocha": "^5.2.0"
-  }
+  "homepage": "https://github.com/Zaseth/node-raknet#readme"
 }
